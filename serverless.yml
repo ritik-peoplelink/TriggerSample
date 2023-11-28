@@ -1,0 +1,141 @@
+service: triggersample
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+custom:
+  serverless-offline:
+    httpPort: 8800
+    lambdaPort: 8100
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+# you can overwrite defaults here
+#  stage: dev
+#  region: us-east-1
+
+
+functions:
+  connectSocket:
+    handler : socket/socketConn.app
+    events:
+      - http:
+          path: /connectSocket
+          method: any
+          cors : true
+  createTriggers:
+    handler: Triggers/TriggerApi/createTrigger.createTriggers
+    timeout: 30
+    events:
+      - http:
+          path: createTrigger
+          method: post
+          cors: true
+  getServices:
+    handler: Triggers/TriggerApi/getAllServiceId.getServiceId
+    events:
+      - http:
+          path: getServices
+          method: get
+          cors: true
+  getAllTriggers:
+    handler: Triggers/TriggerApi/getAllTriggers.getTriggers
+    events:
+      - http:
+          path: getTriggers
+          method: get
+          cors: true
+  getAppId:
+    handler: Triggers/TriggerApi/getApplicationId.getAppId
+    events:
+      - http:
+          path: getAppId
+          method: get
+          cors: true
+  getAuthToken: 
+    handler: Triggers/TriggerApi/getAuth.getAuthenticationToken
+    events:
+      - http:
+          path: getAccessToken
+          method: get
+          cors: true
+
+  getAccessTokenByRef:
+    handler: Triggers/TriggerApi/getTokenByRef.getAccessTokenByRef
+    events:
+      - http:
+          path: updateAccessToken
+          method: put
+          cors: true
+  addProduct:
+    handler: LambdaFunctions/addProduct.main
+    events:
+      - http:
+          path: insertProduct
+          method: post
+          cors: true
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: helloTest
+          method: post
+          cors: true
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    Check the event documentation for details
+#    events:
+#      - httpApi:
+#          path: /users/create
+#          method: get
+#      - websocket: $connect
+#      - s3: ${env:BUCKET}
+#      - schedule: rate(10 minutes)
+#      - sns: greeter-topic
+#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+#      - iot:
+#          sql: "SELECT * FROM 'some_topic'"
+#      - cloudwatchEvent:
+#          event:
+#            source:
+#              - "aws.ec2"
+#            detail-type:
+#              - "EC2 Instance State-change Notification"
+#            detail:
+#              state:
+#                - pending
+#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cognitoUserPool:
+#          pool: MyUserPool
+#          trigger: PreSignUp
+#      - alb:
+#          listenerArn: arn:aws:elasticloadbalancing:us-east-1:XXXXXX:listener/app/my-load-balancer/50dc6c495c0c9188/
+#          priority: 1
+#          conditions:
+#            host: example.com
+#            path: /hello
+
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
+
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
