@@ -2,7 +2,7 @@ import { MongoClient } from 'mongodb';
 // const stream = require('stream');
 
 export async function watchStream() {
-    const uri = "mongodb+srv://bigmouse:6Xv67NN3hlAsoD2S@mongocluster.295l72p.mongodb.net/?retryWrites=true&w=majority";
+    const uri = "mongodb+srv://bigmouse:@mongocluster.295l72p.mongodb.net/?retryWrites=true&w=majority";
 
     const client = new MongoClient(uri);
 
